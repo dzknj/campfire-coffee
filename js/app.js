@@ -1,27 +1,27 @@
 // my js will be in here
-
+"use strict";
 // for future use
-var   timesArray = ["6:00am", "7:00am", "8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm",
-                   "3:00pm", "4:00pm", "5:00pm", "6:00pm", "7:00pm", "8:00pm"];
+var   timesArray = ['6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm',
+                   '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm'];
 
-var   resultsArray = ["", 0, 0, 0];
+var   resultsArray = ['', 0, 0, 0];
 
 
-// var   resultsArray = [["6:00am", 0, 0, 0],
-//                       ["7:00am", 0, 0, 0],
-//                       ["8:00am", 0, 0, 0],
-//                       ["9:00am", 0, 0, 0],
-//                       ["10:00am", 0, 0, 0],
-//                       ["11:00am", 0, 0, 0],
-//                       ["12 noon", 0, 0, 0],
-//                       ["1:00pm", 0, 0, 0],
-//                       ["2:00pm", 0, 0, 0],
-//                       ["3:00pm", 0, 0, 0],
-//                       ["4:00pm", 0, 0, 0],
-//                       ["5:00pm", 0, 0, 0],
-//                       ["6:00pm", 0, 0, 0],
-//                       ["7:00pm", 0, 0, 0],
-//                       ["8:00pm", 0, 0, 0]];
+// var   resultsArray = [['6:00am', 0, 0, 0],
+//                       ['7:00am', 0, 0, 0],
+//                       ['8:00am', 0, 0, 0],
+//                       ['9:00am', 0, 0, 0],
+//                       ['10:00am', 0, 0, 0],
+//                       ['11:00am', 0, 0, 0],
+//                       ['12 noon', 0, 0, 0],
+//                       ['1:00pm', 0, 0, 0],
+//                       ['2:00pm', 0, 0, 0],
+//                       ['3:00pm', 0, 0, 0],
+//                       ['4:00pm', 0, 0, 0],
+//                       ['5:00pm', 0, 0, 0],
+//                       ['6:00pm', 0, 0, 0],
+//                       ['7:00pm', 0, 0, 0],
+//                       ['8:00pm', 0, 0, 0]];
 
 
 var generateNumOfCustomers = function() {
@@ -43,7 +43,7 @@ var genHourlyStatistics = function(i) {
 }
 
 var pikePlaceMarketLoc = {
-  storeLoc: "Pike Place Market",
+  storeLoc: 'Pike Place Market',
   minCustPerHour: 14,
   maxCustPerHour: 55,
   cupsPerCust: 1.2,
@@ -55,7 +55,7 @@ pikePlaceMarketLoc.generateNumOfCust = generateNumOfCustomers;
 pikePlaceMarketLoc.genHourlyStats = genHourlyStatistics;
 
 var capHillLoc = {
-  storeLoc: "Capitol Hill",
+  storeLoc: 'Capitol Hill',
   minCustPerHour: 32,
   maxCustPerHour: 48,
   cupsPerCust: 3.2,
@@ -72,7 +72,7 @@ var showStatsLine = function(i, loc) {
   loc.genHourlyStats(i);
   var lbsForCups = loc.results[1] / 20;
   var totalLbs = lbsForCups + loc.results[3]
-  currentLine = loc.results[0] + ': ' + totalLbs.toFixed(1);
+  var currentLine = loc.results[0] + ': ' + totalLbs.toFixed(1);
   currentLine += ' lbs [' + loc.results[1] + ' customers, ';
   currentLine += loc.results[2].toFixed(1) + ' cups (';
   currentLine += lbsForCups.toFixed(1) + ' lbs.), ';
@@ -89,7 +89,7 @@ var showStatsLine = function(i, loc) {
 var listHeader = document.getElementById('datahead');
 listHeader.textContent = pikePlaceMarketLoc.storeLoc;
 
-for(i = 0;i < timesArray.length; i++) {
+for(var i = 0;i < timesArray.length; i++) {
   showStatsLine(i, pikePlaceMarketLoc);
 }
 
@@ -98,6 +98,6 @@ var newHeaderText = document.createTextNode(capHillLoc.storeLoc);
 newHeader.appendChild(newHeaderText);
 listHeader.parentElement.appendChild(newHeader);
 
-for(i = 0;i < timesArray.length; i++) {
+for(var i = 0;i < timesArray.length; i++) {
   showStatsLine(i, capHillLoc);
 }
