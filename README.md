@@ -1,5 +1,7 @@
-This is my README file.
+# Campfire Coffee
 
-There are many like it, but this one is mine.
+Author: Lex Myers
 
-QUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACKQUACK QUACK QUACK
+This now generates a simulation of how many pounds of coffee beans are needed
+at different locations of a coffee shop, and prints the results out onto the
+page at data.html.
