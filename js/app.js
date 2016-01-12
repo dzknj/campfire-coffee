@@ -4,8 +4,14 @@
 var   timesArray = ['6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm',
                    '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm'];
 
-var   resultsArray = ['', 0, 0, 0];
+// var   resultsArray = ['', 0, 0, 0];
 
+var resultsBlank = {
+  timeString: '',
+  numberOfCustomers: 0,
+  cupsSold: 0,
+  lbsSold: 0
+}
 
 // var   resultsArray = [['6:00am', 0, 0, 0],
 //                       ['7:00am', 0, 0, 0],
@@ -30,15 +36,15 @@ function StoreLocation(storeLoc, minCustPerHour, maxCustPerHour, cupsPerCust, lb
   this.maxCustPerHour = maxCustPerHour;
   this.cupsPerCust = cupsPerCust;
   this.lbsToGoPerCust = lbsToGoPerCust;
-  this.results = resultsArray;
+  this.results = resultsBlank;
   this.generateNumOfCustomers = function() {
     return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
   }
   this.genHourlyStatistics = function(i) {
-    this.results[0] = timesArray[i];
-    this.results[1] = this.generateNumOfCustomers();
-    this.results[2] = this.results[1] * this.cupsPerCust;
-    this.results[3] = this.results[1] * this.lbsToGoPerCust;
+    this.results.timeString = timesArray[i];
+    this.results.numberOfCustomers = this.generateNumOfCustomers();
+    this.results.cupsSold = this.results.numberOfCustomers * this.cupsPerCust;
+    this.results.lbsSold = this.results.numberOfCustomers * this.lbsToGoPerCust;
     return;
   }
 
@@ -92,13 +98,13 @@ var capHillLoc = new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4);
 
 var showStatsLine = function(i, loc) {
   loc.genHourlyStatistics(i);
-  var lbsForCups = loc.results[1] / 20;
-  var totalLbs = lbsForCups + loc.results[3]
-  var currentLine = loc.results[0] + ': ' + totalLbs.toFixed(1);
-  currentLine += ' lbs [' + loc.results[1] + ' customers, ';
-  currentLine += loc.results[2].toFixed(1) + ' cups (';
+  var lbsForCups = loc.results.numberOfCustomers / 20;
+  var totalLbs = lbsForCups + loc.results.lbsSold;
+  var currentLine = loc.results.timeString + ': ' + totalLbs.toFixed(1);
+  currentLine += ' lbs [' + loc.results.numberOfCustomers + ' customers, ';
+  currentLine += loc.results.cupsSold.toFixed(1) + ' cups (';
   currentLine += lbsForCups.toFixed(1) + ' lbs.), ';
-  currentLine += loc.results[3].toFixed(1) + ' lbs to-go]';
+  currentLine += loc.results.lbsSold.toFixed(1) + ' lbs to-go]';
   console.log(currentLine);
   var newPar = document.createElement('p');
   var newText = document.createTextNode(currentLine);
