@@ -10,8 +10,8 @@ var resultsBlank = {
   lbsSold: 0
 }
 
-function StoreLocation(storeLoc, minCustPerHour, maxCustPerHour, cupsPerCust, lbsToGoPerCust) {
-  this.storeLoc = storeLoc;
+function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbsToGoPerCust) {
+  this.locName = locName;
   this.minCustPerHour = minCustPerHour;
   this.maxCustPerHour = maxCustPerHour;
   this.cupsPerCust = cupsPerCust;
@@ -29,9 +29,11 @@ function StoreLocation(storeLoc, minCustPerHour, maxCustPerHour, cupsPerCust, lb
   }
 }
 
-var pikePlaceMarketLoc = new StoreLocation('Pike Place Market', 14, 55, 1.2, 5.7);
+var pikePlaceMarketStore = new StoreLocation('Pike Place Market', 14, 55, 1.2, 5.7);
 
-var capHillLoc = new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4);
+var capitolHillStore = new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4);
+
+var seattlePublicLibrary = new StoreLocation('Seattle Public Library', 49, 75, 2.6, 0.2);
 
 // function renderTblLine(timeString, totalLbs) {
 //
@@ -42,34 +44,90 @@ var capHillLoc = new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4);
 // }
 
 
-var showStatsLine = function(i, loc) {
-  loc.genHourlyStatistics(i);
-  var lbsForCups = loc.results.numberOfCustomers / 20;
-  var totalLbs = lbsForCups + loc.results.lbsSold;
-  var currentLine = loc.results.timeString + ': ' + totalLbs.toFixed(1);
-  currentLine += ' lbs [' + loc.results.numberOfCustomers + ' customers, ';
-  currentLine += loc.results.cupsSold.toFixed(1) + ' cups (';
-  currentLine += lbsForCups.toFixed(1) + ' lbs.), ';
-  currentLine += loc.results.lbsSold.toFixed(1) + ' lbs to-go]';
-  console.log(currentLine);
-  var newPar = document.createElement('p');
-  var newText = document.createTextNode(currentLine);
-  newPar.appendChild(newText);
-  listHeader.parentElement.appendChild(newPar);
+// var showStatsLine = function(i, loc) {
+//   loc.genHourlyStatistics(i);
+//   var lbsForCups = loc.results.numberOfCustomers / 20;
+//   var totalLbs = lbsForCups + loc.results.lbsSold;
+//   var currentLine = loc.results.timeString + ': ' + totalLbs.toFixed(1);
+//   currentLine += ' lbs [' + loc.results.numberOfCustomers + ' customers, ';
+//   currentLine += loc.results.cupsSold.toFixed(1) + ' cups (';
+//   currentLine += lbsForCups.toFixed(1) + ' lbs.), ';
+//   currentLine += loc.results.lbsSold.toFixed(1) + ' lbs to-go]';
+//   console.log(currentLine);
+//   var newPar = document.createElement('p');
+//   var newText = document.createTextNode(currentLine);
+//   newPar.appendChild(newText);
+//   listHeader.parentElement.appendChild(newPar);
+// }
 
+var sectHead = document.getElementById('main');
+
+function createRow(el1Text, el2Text) {
+  var newRow = document.createElement('tr');
+  var element1 = document.createElement('td');
+  element1.textContent = el1Text;
+  var element2 = document.createElement("td");
+  element2.textContent = el2Text;
+  newRow.appendChild(element1);
+  newRow.appendChild(element2);
+  return newRow;
 }
-var listHeader = document.getElementById('datahead');
-listHeader.textContent = pikePlaceMarketLoc.storeLoc;
 
-for(var i = 0;i < timesArray.length; i++) {
-  showStatsLine(i, pikePlaceMarketLoc);
+function renderRow(storeLoc, i) {
+  storeLoc.genHourlyStatistics();
+  var lbsForCups = storeLoc.results.numberOfCustomers / 20;
+  var totalLbs = lbsForCups + storeLoc.results.lbsSold;
+  return createRow(timesArray[i], totalLbs.toFixed(1));
 }
 
-var newHeader = document.createElement('h2');
-var newHeaderText = document.createTextNode(capHillLoc.storeLoc);
-newHeader.appendChild(newHeaderText);
-listHeader.parentElement.appendChild(newHeader);
+function renderTable(storeLoc) {
+  // create a new header element with the store name
+  var newHeader = document.createElement('h2');
+  var newHeaderText = document.createTextNode(storeLoc.locName);
+  newHeader.appendChild(newHeaderText);
+  sectHead.appendChild(newHeader);
+  // create a new table
+  var newTable = document.createElement('table');
+  var newTableHead =document.createElement('thead');
+  // create the top row
+  var topRow = document.createElement('tr');
+  // create header for the row
+  var top1El = document.createElement('th');
+  // put text in there
+  top1El.textContent = 'Time of Day';
+  var top2El = document.createElement('th');
+  top2El.textContent = 'Pounds sold';
+  topRow.appendChild(top1El);
+  topRow.appendChild(top2El);
+  newTableHead.appendChild(topRow);
+  newTable.appendChild(newTableHead);
 
-for(var i = 0;i < timesArray.length; i++) {
-  showStatsLine(i, capHillLoc);
+  console.log(renderRow(storeLoc, 1))
+  for(var i = 0;i < timesArray.length; i++) {
+    newTable.appendChild(renderRow(storeLoc, i));
+  }
+
+
+  sectHead.appendChild(newTable);
+  // newHeader.appendChild(newHeaderText);
+  // sectHead.appendChild(newHeader);
 }
+
+renderTable(pikePlaceMarketStore);
+renderTable(capitolHillStore);
+renderTable(seattlePublicLibrary);
+
+// listHeader.textContent = pikePlaceMarketLoc.storeLoc;
+//
+// for(var i = 0;i < timesArray.length; i++) {
+//   showStatsLine(i, pikePlaceMarketLoc);
+// }
+//
+// var newHeader = document.createElement('h2');
+// var newHeaderText = document.createTextNode(capHillLoc.storeLoc);
+// newHeader.appendChild(newHeaderText);
+// listHeader.parentElement.appendChild(newHeader);
+//
+// for(var i = 0;i < timesArray.length; i++) {
+//   showStatsLine(i, capHillLoc);
+// }
