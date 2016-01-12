@@ -1,102 +1,105 @@
-// my js will be in here
+"use strict";
 
-// for future use
-// var   timesArray = ["6:00am", "7:00am", "8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm",
-//                    "3:00pm", "4:00pm", "5:00pm", "6:00pm", "7:00pm", "8:00pm"];
+var   timesArray = ['6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm',
+                   '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm'];
 
-
-
-var   resultsArray = [["6:00am", 0, 0, 0],
-                      ["7:00am", 0, 0, 0],
-                      ["8:00am", 0, 0, 0],
-                      ["9:00am", 0, 0, 0],
-                      ["10:00am", 0, 0, 0],
-                      ["11:00am", 0, 0, 0],
-                      ["12 noon", 0, 0, 0],
-                      ["1:00pm", 0, 0, 0],
-                      ["2:00pm", 0, 0, 0],
-                      ["3:00pm", 0, 0, 0],
-                      ["4:00pm", 0, 0, 0],
-                      ["5:00pm", 0, 0, 0],
-                      ["6:00pm", 0, 0, 0],
-                      ["7:00pm", 0, 0, 0],
-                      ["8:00pm", 0, 0, 0]];
-
-
-var generateNumOfCustomers = function() {
-  return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
+var resultsBlank = {
+  timeString: '',
+  numberOfCustomers: 0,
+  cupsSold: 0,
+  lbsSold: 0
 }
 
-var genHourlyStatistics = function(i) {
-  //stats[1] is the number of customers for this hour
-  this.results[i][1] = this.generateNumOfCust();
-  //stats[2] is the number of cups purchased this hour
-  this.results[i][2] = this.results[i][1] * this.cupsPerCust;
-  //stats[3] is the number of lbs purchased this hour
-  this.results[i][3] = this.results[i][1] * this.lbsToGoPerCust;
-  return;
+function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbsToGoPerCust) {
+  this.locName = locName;
+  this.minCustPerHour = minCustPerHour;
+  this.maxCustPerHour = maxCustPerHour;
+  this.cupsPerCust = cupsPerCust;
+  this.lbsToGoPerCust = lbsToGoPerCust;
+  this.results = resultsBlank;
+  this.generateNumOfCustomers = function() {
+    return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
+  }
+  this.genHourlyStatistics = function(i) {
+    this.results.timeString = timesArray[i];
+    this.results.numberOfCustomers = this.generateNumOfCustomers();
+    this.results.cupsSold = this.results.numberOfCustomers * this.cupsPerCust;
+    this.results.lbsSold = this.results.numberOfCustomers * this.lbsToGoPerCust;
+    return;
+  }
 }
 
-var pikePlaceMarketLoc = {
-  storeLoc: "Pike Place Market",
-  minCustPerHour: 14,
-  maxCustPerHour: 55,
-  cupsPerCust: 1.2,
-  lbsToGoPerCust: 3.7
+
+// storeArray contains a set of objects, each representing a store location
+
+var storeArray = [];
+
+storeArray.push(new StoreLocation('Pike Place Market', 14, 55, 1.2, 5.7));
+storeArray.push(new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4));
+storeArray.push(new StoreLocation('Seattle Public Library', 49, 75, 2.6, 0.2));
+storeArray.push(new StoreLocation('South Lake Union', 35, 88, 1.3, 3.7));
+storeArray.push(new StoreLocation('Sea-Tac Airport', 68, 124, 1.1, 2.7));
+storeArray.push(new StoreLocation('Website Sales', 3, 6, 0, 6.7));
+
+// sectHead is the top of the section that holds the tables
+
+var sectHead = document.getElementById('main');
+
+// renderRow returns HTML for each row of each table, given input of the text
+// for each element. 'header' is a boolean indicating in the row is at the
+// head of the table.
+
+function renderRow(el1Text, el2Text, header) {
+  var newRow = document.createElement('tr');
+  if(header) {
+    var element1 = document.createElement('th');
+    var element2 = document.createElement("th");
+  } else {
+    var element1 = document.createElement('td');
+    var element2 = document.createElement("td");
+  }
+  element1.textContent = el1Text;
+  element2.textContent = el2Text;
+  newRow.appendChild(element1);
+  newRow.appendChild(element2);
+  return newRow;
 }
 
-pikePlaceMarketLoc.results = resultsArray;
-pikePlaceMarketLoc.generateNumOfCust = generateNumOfCustomers;
-pikePlaceMarketLoc.genHourlyStats = genHourlyStatistics;
+// calcRow calculates the stats for each hour, then calls renderRow to
+// generate the HTML
 
-var capHillLoc = {
-  storeLoc: "Capitol Hill",
-  minCustPerHour: 32,
-  maxCustPerHour: 48,
-  cupsPerCust: 3.2,
-  lbsToGoPerCust: 0.4
+function calcRow(storeLoc, i) {
+  storeLoc.genHourlyStatistics();
+  var lbsForCups = storeLoc.results.numberOfCustomers / 20;
+  var totalLbs = lbsForCups + storeLoc.results.lbsSold;
+  return renderRow(timesArray[i], totalLbs.toFixed(1), false);
 }
 
-capHillLoc.results = resultsArray;
-capHillLoc.generateNumOfCust = generateNumOfCustomers;
-capHillLoc.genHourlyStats = genHourlyStatistics;
+// renderTable creates a table beneath a header with the store name
 
-
-
-
-
-
-
-var showStatsLine = function(i, loc) {
-  loc.genHourlyStats(i);
-  var lbsForCups = loc.results[i][1] / 20;
-  var totalLbs = lbsForCups + loc.results[i][3]
-  currentLine = loc.results[i][0] + ': ' + totalLbs.toFixed(1);
-  currentLine += ' lbs [' + loc.results[i][1] + ' customers, ';
-  currentLine += loc.results[i][2].toFixed(1) + ' cups (';
-  currentLine += lbsForCups.toFixed(1) + ' lbs.), ';
-  currentLine += loc.results[i][3].toFixed(1) + ' lbs to-go]';
-  console.log(currentLine);
-  var newPar = document.createElement('p');
-  var newText = document.createTextNode(currentLine);
-  newPar.appendChild(newText);
-//  msg = '<p>' + currentLine + '</p>';
-  listHeader.parentElement.appendChild(newPar);
-//  var msg =
-
-}
-var listHeader = document.getElementById('datahead');
-listHeader.textContent = pikePlaceMarketLoc.storeLoc;
-
-for(i = 0;i < pikePlaceMarketLoc.results.length; i++) {
-  showStatsLine(i, pikePlaceMarketLoc);
+function renderTable(storeLoc) {
+  // create a new header element with the store name
+  var newHeader = document.createElement('h2');
+  var newHeaderText = document.createTextNode(storeLoc.locName);
+  newHeader.appendChild(newHeaderText);
+  // add it to the section
+  sectHead.appendChild(newHeader);
+  // create a new table
+  var newTable = document.createElement('table');
+  var newTableHead =document.createElement('thead');
+  // call renderRow to create a header for the table
+  newTableHead.appendChild(renderRow('Time of Day', 'Pounds Sold', true));
+  newTable.appendChild(newTableHead);
+  // generate the data for each row
+  for(var i = 0;i < timesArray.length; i++) {
+    newTable.appendChild(calcRow(storeLoc, i));
+  }
+  // ... and finally add the table to the section
+  sectHead.appendChild(newTable);
 }
 
-var newHeader = document.createElement('h2');
-var newHeaderText = document.createTextNode(capHillLoc.storeLoc);
-newHeader.appendChild(newHeaderText);
-listHeader.parentElement.appendChild(newHeader);
+// main loop: generate a table for each object in storeArray
 
-for(i = 0;i < pikePlaceMarketLoc.results.length; i++) {
-  showStatsLine(i, capHillLoc);
+for(var j = 0; j < storeArray.length; j++) {
+  renderTable(storeArray[j]);
 }
