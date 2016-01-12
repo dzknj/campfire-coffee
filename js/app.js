@@ -24,52 +24,74 @@ var   resultsArray = ['', 0, 0, 0];
 //                       ['8:00pm', 0, 0, 0]];
 
 
-var generateNumOfCustomers = function() {
-  return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
+function StoreLocation(storeLoc, minCustPerHour, maxCustPerHour, cupsPerCust, lbsToGoPerCust) {
+  this.storeLoc = storeLoc;
+  this.minCustPerHour = minCustPerHour;
+  this.maxCustPerHour = maxCustPerHour;
+  this.cupsPerCust = cupsPerCust;
+  this.lbsToGoPerCust = lbsToGoPerCust;
+  this.results = resultsArray;
+  this.generateNumOfCustomers = function() {
+    return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
+  }
+  this.genHourlyStatistics = function(i) {
+    this.results[0] = timesArray[i];
+    this.results[1] = this.generateNumOfCustomers();
+    this.results[2] = this.results[1] * this.cupsPerCust;
+    this.results[3] = this.results[1] * this.lbsToGoPerCust;
+    return;
+  }
+
 }
 
-var genHourlyStatistics = function(i) {
-  this.results[0] = timesArray[i];
-  this.results[1] = this.generateNumOfCust();
-  this.results[2] = this.results[1] * this.cupsPerCust;
-  this.results[3] = this.results[1] * this.lbsToGoPerCust;
+// var generateNumOfCustomers = function() {
+//   return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
+// }
+//
+// var genHourlyStatistics = function(i) {
+//   this.results[0] = timesArray[i];
+//   this.results[1] = this.generateNumOfCust();
+//   this.results[2] = this.results[1] * this.cupsPerCust;
+//   this.results[3] = this.results[1] * this.lbsToGoPerCust;
   //stats[1] is the number of customers for this hour
   // this.results[i][1] = this.generateNumOfCust();
   //stats[2] is the number of cups purchased this hour
   // this.results[i][2] = this.results[i][1] * this.cupsPerCust;
   //stats[3] is the number of lbs purchased this hour
   // this.results[i][3] = this.results[i][1] * this.lbsToGoPerCust;
-  return;
-}
+//   return;
+// }
 
-var pikePlaceMarketLoc = {
-  storeLoc: 'Pike Place Market',
-  minCustPerHour: 14,
-  maxCustPerHour: 55,
-  cupsPerCust: 1.2,
-  lbsToGoPerCust: 3.7
-}
+// var pikePlaceMarketLoc = {
+//   storeLoc: 'Pike Place Market',
+//   minCustPerHour: 14,
+//   maxCustPerHour: 55,
+//   cupsPerCust: 1.2,
+//   lbsToGoPerCust: 3.7
+// }
+// pikePlaceMarketLoc.results = resultsArray;
+// pikePlaceMarketLoc.generateNumOfCust = generateNumOfCustomers;
+// pikePlaceMarketLoc.genHourlyStats = genHourlyStatistics;
 
-pikePlaceMarketLoc.results = resultsArray;
-pikePlaceMarketLoc.generateNumOfCust = generateNumOfCustomers;
-pikePlaceMarketLoc.genHourlyStats = genHourlyStatistics;
+var pikePlaceMarketLoc = new StoreLocation('Pike Place Market', 14, 55, 1.2, 5.7);
 
-var capHillLoc = {
-  storeLoc: 'Capitol Hill',
-  minCustPerHour: 32,
-  maxCustPerHour: 48,
-  cupsPerCust: 3.2,
-  lbsToGoPerCust: 0.4
-}
+// var capHillLoc = {
+//   storeLoc: 'Capitol Hill',
+//   minCustPerHour: 32,
+//   maxCustPerHour: 48,
+//   cupsPerCust: 3.2,
+//   lbsToGoPerCust: 0.4
+// }
+//
+// capHillLoc.results = resultsArray;
+// capHillLoc.generateNumOfCust = generateNumOfCustomers;
+// capHillLoc.genHourlyStats = genHourlyStatistics;
 
-capHillLoc.results = resultsArray;
-capHillLoc.generateNumOfCust = generateNumOfCustomers;
-capHillLoc.genHourlyStats = genHourlyStatistics;
-
+var capHillLoc = new StoreLocation('Capitol Hill', 32, 48, 3.2, 0.4);
 
 
 var showStatsLine = function(i, loc) {
-  loc.genHourlyStats(i);
+  loc.genHourlyStatistics(i);
   var lbsForCups = loc.results[1] / 20;
   var totalLbs = lbsForCups + loc.results[3]
   var currentLine = loc.results[0] + ': ' + totalLbs.toFixed(1);
