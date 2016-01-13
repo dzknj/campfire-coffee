@@ -3,12 +3,12 @@
 var   timesArray = ['6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm',
                    '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm'];
 
-var resultsBlank = {
-  timeString: '',
-  numberOfCustomers: 0,
-  cupsSold: 0,
-  lbsSold: 0
-}
+// var resultsBlank = {
+//   timeString: '',
+//   numberOfCustomers: 0,
+//   cupsSold: 0,
+//   lbsSold: 0
+// }
 
 function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbsToGoPerCust) {
   this.locName = locName;
@@ -16,15 +16,19 @@ function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbs
   this.maxCustPerHour = maxCustPerHour;
   this.cupsPerCust = cupsPerCust;
   this.lbsToGoPerCust = lbsToGoPerCust;
-  this.results = resultsBlank;
+  // this.results = resultsBlank;
+  this.numberOfCustomers = [];
+  this.cupsSold = [];
+  this.lbsSold = []
   this.generateNumOfCustomers = function() {
     return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
   }
-  this.genHourlyStatistics = function(i) {
-    this.results.timeString = timesArray[i];
-    this.results.numberOfCustomers = this.generateNumOfCustomers();
-    this.results.cupsSold = this.results.numberOfCustomers * this.cupsPerCust;
-    this.results.lbsSold = this.results.numberOfCustomers * this.lbsToGoPerCust;
+  this.genHourlyStatistics = function() {
+//    this.results.timeString = timesArray[i];
+    this.numberOfCustomers.push(this.generateNumOfCustomers());
+    var arrPosition = this.numberOfCustomers.length - 1;
+    this.cupsSold.push(this.numberOfCustomers[arrPosition] * this.cupsPerCust);
+    this.lbsSold.push(this.numberOfCustomers[arrPosition] * this.lbsToGoPerCust);
     return;
   }
 }
@@ -70,8 +74,8 @@ function renderRow(el1Text, el2Text, header) {
 
 function calcRow(storeLoc, i) {
   storeLoc.genHourlyStatistics();
-  var lbsForCups = storeLoc.results.numberOfCustomers / 20;
-  var totalLbs = lbsForCups + storeLoc.results.lbsSold;
+  var lbsForCups = storeLoc.numberOfCustomers[i] / 20;
+  var totalLbs = lbsForCups + storeLoc.lbsSold[i];
   return renderRow(timesArray[i], totalLbs.toFixed(1), false);
 }
 
