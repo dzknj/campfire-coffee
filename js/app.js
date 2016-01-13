@@ -53,57 +53,93 @@ var sectHead = document.getElementById('main');
 // for each element. 'header' is a boolean indicating in the row is at the
 // head of the table.
 
-function renderRow(el1Text, el2Text, header) {
+function renderStoreRow(rowHdrText, rowContentArray, header) {
   var newRow = document.createElement('tr');
+  var rowElementArray = [];
+  rowElementArray[0] = document.createElement('th');
+  rowElementArray[0].textContent = rowHdrText;
   if(header) {
-    var element1 = document.createElement('th');
-    var element2 = document.createElement("th");
+    for(var i = 1; i <= timesArray.length; i++) {
+      rowElementArray[i] = document.createElement('th');
+      rowElementArray[i].textContent = rowContentArray[i - 1];
+    }
   } else {
-    var element1 = document.createElement('td');
-    var element2 = document.createElement("td");
+    for(var i = 1; i <= timesArray.length; i++) {
+      rowElementArray[i] = document.createElement('td');
+      rowElementArray[i].textContent = rowContentArray[i - 1];
+    }
   }
-  element1.textContent = el1Text;
-  element2.textContent = el2Text;
-  newRow.appendChild(element1);
-  newRow.appendChild(element2);
-  return newRow;
+    for(var i = 0; i <= timesArray.length; i++) {
+      newRow.appendChild(rowElementArray[i]);
+    }
+    return newRow;
 }
 
-// calcRow calculates the stats for each hour, then calls renderRow to
-// generate the HTML
-
-function calcRow(storeLoc, i) {
-  storeLoc.genHourlyStatistics();
-  var lbsForCups = storeLoc.numberOfCustomers[i] / 20;
-  var totalLbs = lbsForCups + storeLoc.lbsSold[i];
-  return renderRow(timesArray[i], totalLbs.toFixed(1), false);
-}
-
-// renderTable creates a table beneath a header with the store name
-
-function renderTable(storeLoc) {
-  // create a new header element with the store name
-  var newHeader = document.createElement('h2');
-  var newHeaderText = document.createTextNode(storeLoc.locName);
-  newHeader.appendChild(newHeaderText);
-  // add it to the section
-  sectHead.appendChild(newHeader);
-  // create a new table
+function renderTable() {
   var newTable = document.createElement('table');
   var newTableHead =document.createElement('thead');
   // call renderRow to create a header for the table
-  newTableHead.appendChild(renderRow('Time of Day', 'Pounds Sold', true));
+  newTableHead.appendChild(renderStoreRow("", timesArray, true));
+//  for(var i = 0; i < timesArray.length; i++)
   newTable.appendChild(newTableHead);
-  // generate the data for each row
-  for(var i = 0;i < timesArray.length; i++) {
-    newTable.appendChild(calcRow(storeLoc, i));
-  }
-  // ... and finally add the table to the section
   sectHead.appendChild(newTable);
 }
 
+renderTable();
+
+// function renderRow(el1Text, el2Text, header) {
+//   var newRow = document.createElement('tr');
+//   if(header) {
+//     var element1 = document.createElement('th');
+//     var element2 = document.createElement("th");
+//   } else {
+//     var element1 = document.createElement('td');
+//     var element2 = document.createElement("td");
+//   }
+//   element1.textContent = el1Text;
+//   element2.textContent = el2Text;
+//   newRow.appendChild(element1);
+//   newRow.appendChild(element2);
+//   return newRow;
+// }
+//
+// // calcRow calculates the stats for each hour, then calls renderRow to
+// // generate the HTML
+//
+// function calcRow(storeLoc, i) {
+//   storeLoc.genHourlyStatistics();
+//   var lbsForCups = storeLoc.numberOfCustomers[i] / 20;
+//   var totalLbs = lbsForCups + storeLoc.lbsSold[i];
+//   return renderRow(timesArray[i], totalLbs.toFixed(1), false);
+// }
+//
+// // renderTable creates a table beneath a header with the store name
+//
+// function renderTable(storeLoc) {
+//   // create a new header element with the store name
+//   var newHeader = document.createElement('h2');
+//   var newHeaderText = document.createTextNode(storeLoc.locName);
+//   newHeader.appendChild(newHeaderText);
+//   // add it to the section
+//   sectHead.appendChild(newHeader);
+//   // create a new table
+//   var newTable = document.createElement('table');
+//   var newTableHead =document.createElement('thead');
+//   // call renderRow to create a header for the table
+//   newTableHead.appendChild(renderRow('Time of Day', 'Pounds Sold', true));
+//   newTable.appendChild(newTableHead);
+//   // generate the data for each row
+//   for(var i = 0;i < timesArray.length; i++) {
+//     newTable.appendChild(calcRow(storeLoc, i));
+//   }
+//   // ... and finally add the table to the section
+//   sectHead.appendChild(newTable);
+// }
+
 // main loop: generate a table for each object in storeArray
 
-for(var j = 0; j < storeArray.length; j++) {
-  renderTable(storeArray[j]);
-}
+
+
+// for(var j = 0; j < storeArray.length; j++) {
+//   renderTable(storeArray[j]);
+// }
