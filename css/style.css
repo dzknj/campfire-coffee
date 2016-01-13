@@ -1,3 +1,31 @@
+body {
+  /*background-color: #f7e242;*/
+  background-color: #F6E256;
+}
+
+header {
+  text-align: center;
+  font-family: 'Old Standard TT', serif;
+  background-color: #80BB33;
+  /*background-color: #90ce14;*/
+  /*background-color: #588c7e;*/
+  height: 125px;
+}
+
+.logo {
+  float: left;
+}
+
+h1 {
+  font-size: 250%;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 120%;
+  margin: 0px;
+}
+
 th, td {
   border: 2px solid black;
 }
