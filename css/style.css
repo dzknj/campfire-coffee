@@ -12,15 +12,20 @@ body {
   height: 125px;
 }
 
+nav {
+  background-color: #8c4646;
+}
+
 nav li {
   display: inline;
   font-family: 'Old Standard TT', serif;
   margin: 0px 5px;
 }
 
-/*nav li a {
-
-}*/
+nav li a {
+  text-decoration: none;
+  color: #f2c69f;
+}
 
 ul {
   text-align: center;
