@@ -2,6 +2,7 @@
 
 var   timesArray = ['6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am', '12:00pm', '1:00pm', '2:00pm',
                    '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm'];
+var   timesLength = timesArray.length;
 
 // var resultsBlank = {
 //   timeString: '',
@@ -19,7 +20,8 @@ function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbs
   // this.results = resultsBlank;
   this.numberOfCustomers = [];
   this.cupsSold = [];
-  this.lbsSold = []
+  this.lbsSold = [];
+  this.dailyLbsSold = 0;
   this.generateNumOfCustomers = function() {
     return Math.floor(Math.random() * (this.maxCustPerHour - this.minCustPerHour + 1) + this.minCustPerHour);
   }
@@ -28,7 +30,7 @@ function StoreLocation(locName, minCustPerHour, maxCustPerHour, cupsPerCust, lbs
     this.numberOfCustomers.push(this.generateNumOfCustomers());
     var arrPosition = this.numberOfCustomers.length - 1;
     this.cupsSold.push(this.numberOfCustomers[arrPosition] * this.cupsPerCust);
-    this.lbsSold.push(this.numberOfCustomers[arrPosition] * this.lbsToGoPerCust);
+    this.lbsSold.push((this.numberOfCustomers[arrPosition] * this.lbsToGoPerCust) + (this.cupsSold[this.cupsSold.length - 1] / 20));
     return;
   }
 }
@@ -53,23 +55,27 @@ var sectHead = document.getElementById('main');
 // for each element. 'header' is a boolean indicating in the row is at the
 // head of the table.
 
-function renderStoreRow(rowHdrText, rowContentArray, header) {
+function renderStoreRow(rowHdrText, rowContentArray, rowTotal, isHeader) {
   var newRow = document.createElement('tr');
   var rowElementArray = [];
   rowElementArray[0] = document.createElement('th');
   rowElementArray[0].textContent = rowHdrText;
-  if(header) {
-    for(var i = 1; i <= timesArray.length; i++) {
-      rowElementArray[i] = document.createElement('th');
-      rowElementArray[i].textContent = rowContentArray[i - 1];
+  if(isHeader) {
+    for(var i = 0; i <= timesLength; i++) {
+      rowElementArray[i + 1] = document.createElement('th');
+      rowElementArray[i + 1].textContent = rowContentArray[i];
     }
+    rowElementArray[timesLength + 1]  = document.createElement('th');
+    rowElementArray[i].textContent = "Totals";
   } else {
-    for(var i = 1; i <= timesArray.length; i++) {
-      rowElementArray[i] = document.createElement('td');
-      rowElementArray[i].textContent = rowContentArray[i - 1];
+    for(var i = 0; i <= timesLength; i++) {
+      rowElementArray[i + 1] = document.createElement('td');
+      rowElementArray[i + 1].textContent = parseFloat(rowContentArray[i]).toFixed(1);
     }
+    rowElementArray[timesLength + 1]  = document.createElement('td');
+    rowElementArray[i].textContent = rowTotal;
   }
-    for(var i = 0; i <= timesArray.length; i++) {
+    for(var i = 0; i <= timesLength + 1; i++) {
       newRow.appendChild(rowElementArray[i]);
     }
     return newRow;
@@ -78,13 +84,25 @@ function renderStoreRow(rowHdrText, rowContentArray, header) {
 function renderTable() {
   var newTable = document.createElement('table');
   var newTableHead =document.createElement('thead');
-  // call renderRow to create a header for the table
-  newTableHead.appendChild(renderStoreRow("", timesArray, true));
-//  for(var i = 0; i < timesArray.length; i++)
+  // create a header for the table
+  newTableHead.appendChild(renderStoreRow("", timesArray, "Totals", true));
+  for(var i = 0; i < storeArray.length; i++) {
+    newTableHead.appendChild(renderStoreRow(storeArray[i].locName, storeArray[i].lbsSold, storeArray[i].dailyLbsSold.toFixed(1), false));
+  }
   newTable.appendChild(newTableHead);
   sectHead.appendChild(newTable);
 }
 
+function generateStoreData() {
+  for(var i = 0; i < storeArray.length; i++) {
+    for(var j = 0; j < timesLength; j++) {
+      storeArray[i].genHourlyStatistics();
+      storeArray[i].dailyLbsSold += storeArray[i].lbsSold[j];
+    }
+  }
+}
+
+generateStoreData();
 renderTable();
 
 // function renderRow(el1Text, el2Text, header) {
