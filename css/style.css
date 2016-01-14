@@ -3,7 +3,7 @@ body {
   background-color: #F6E256;
 }
 
-header {
+.titles {
   text-align: center;
   font-family: 'Old Standard TT', serif;
   background-color: #80BB33;
@@ -12,8 +12,18 @@ header {
   height: 125px;
 }
 
+nav li {
+  display: inline;
+  font-family: 'Old Standard TT', serif;
+  margin: 0px 5px;
+}
+
+ul {
+  text-align: center;
+}
+
 .logo {
-  float: left;
+  float: right;
 }
 
 h1 {
@@ -28,4 +38,8 @@ h3 {
 
 th, td {
   border: 2px solid black;
+}
+
+table {
+  border-collapse: collapse;
 }
