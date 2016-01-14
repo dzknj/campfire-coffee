@@ -1,3 +1,54 @@
+body {
+  /*background-color: #f7e242;*/
+  background-color: #F6E256;
+}
+
+.titles {
+  text-align: center;
+  font-family: 'Old Standard TT', serif;
+  background-color: #80BB33;
+  /*background-color: #90ce14;*/
+  /*background-color: #588c7e;*/
+  height: 125px;
+}
+
+nav {
+  background-color: #8c4646;
+}
+
+nav li {
+  display: inline;
+  font-family: 'Old Standard TT', serif;
+  margin: 0px 5px;
+}
+
+nav li a {
+  text-decoration: none;
+  color: #f2c69f;
+}
+
+ul {
+  text-align: center;
+}
+
+.logo {
+  float: right;
+}
+
+h1 {
+  font-size: 250%;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 120%;
+  margin: 0px;
+}
+
 th, td {
   border: 2px solid black;
+}
+
+table {
+  border-collapse: collapse;
 }
